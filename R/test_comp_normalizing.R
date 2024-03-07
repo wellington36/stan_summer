@@ -8,7 +8,7 @@ TrueValue <- function(mu, nu){
   if (nu == 1) mu else if (nu == 2) log(besselI(2*sqrt(mu), nu = 0)) else
     logSumExp(sort(COMP_lpmf(k = 0:1e5, c(mu, nu))))}
 
-# system("rm COMP_normalizing")
+# system("rm stan/COMP_normalizing")
 model <- cmdstan_model("stan/COMP_normalizing.stan",
                        include_paths = "stan")
 
@@ -34,3 +34,4 @@ Rmpfr::mpfr(ext$truth_1, 1000)
 Rmpfr::mpfr(ext$truth_2, 1000)
 Rmpfr::mpfr(ext$difference, 1000)
 Rmpfr::mpfr(ext$difference2, 1000)
+
