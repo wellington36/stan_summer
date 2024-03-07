@@ -1,6 +1,6 @@
 functions {
   // p: lambda, p, n_i1, n_i2, ..., n_iT
-  real logFunction(int k, real[] param, int[] ns) {
+  real logFunction(int k, array[] real param, int[] ns) {
     vector[size(ns)] bins;
     for (i in 1:size(ns)) bins[i] = binomial_lpmf(ns[i] | k, param[2]);
     return poisson_lpmf(k | param[1]) + sum(bins);

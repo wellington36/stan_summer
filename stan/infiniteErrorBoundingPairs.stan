@@ -15,7 +15,7 @@ int adaptiveConvergenceCheck(real oldT, real newT, real lepsilon, real log1mL) {
 
 // Adaptive inifinite sum algorithm
 // Requires definition of logFunction with two arguments:
-// int k and real[] parameters
+// int k and array[] real parameters
 array[] real infiniteErrorBoundingPairs(array[] real p, real epsilon, int maxIter, real logL, int n0) {
   vector[maxIter + 1] storeVal;
   real leps = log(epsilon) + log2();

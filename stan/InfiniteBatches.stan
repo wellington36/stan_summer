@@ -1,6 +1,6 @@
 // c-folding inifinite sum algorithm
 // Requires definition of logFunction with two arguments:
-// int k and real[] parameters
+// int k and array[] real parameters
 array[] real infiniteBatches(array[] real p, int batch_size, real epsilon, int maxIter, int n0) {
   array[batch_size + 1] real storeVal;
   real leps = log(epsilon);
