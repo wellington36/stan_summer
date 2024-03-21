@@ -1,7 +1,7 @@
 // Sum-To-Threshold inifinite sum algorithm
-// Requires definition of logFunction with two arguments:
+// Requires definition of logFunction with tree arguments:
 // int k and array[] real parameters
-array[] real infiniteSumToThreshold(array[] real p, int[] ns, real epsilon, int maxIter, int n0) {
+array[] real infiniteSumToThreshold(array[] real p, array[] int ns, real epsilon, int maxIter, int n0) {
   vector[maxIter + 1] storeVal;
   real leps = log(epsilon);
   int n = 2;
