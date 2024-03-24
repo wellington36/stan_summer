@@ -34,7 +34,7 @@ transformed parameters {
   p_lambda[2] = lambda;
   
   for (i in 1:R) components[i] = infiniteSumToThreshold(p_lambda, n[i, ],
-    1e-14, 100000, max_ns[i])[0];
+    1e-14, 100000, max_ns[i])[1];
 }
 
 model {
