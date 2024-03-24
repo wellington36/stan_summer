@@ -18,7 +18,7 @@ array[] real infiniteBatches(array[] real p, int batch_size, real epsilon, int m
   }
   storeVal[1] = log_sum_exp(sort_asc(storeVal));
 
-  // Find the maximum
+  // Find the maximum and testing convergence
   while (n < maxIter && (
     n <= batch_size ||
     summedIncrement > leps ||
