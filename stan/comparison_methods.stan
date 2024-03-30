@@ -2,21 +2,19 @@ functions{
   real logFunction(int k, array[] real p){
     return - 2*log(k+1) - (k+1)*log(p[1]);
   }
-  real difference_check(real v1, real v2){
-    if (v1 > v2)
-      return(exp(log_diff_exp(v1, v2)));
-    else
-      return(exp(log_diff_exp(v2, v1)));
-  }
   // logFunction must be defined beforehand
   #include infiniteSumToThreshold.stan
+  #include infiniteErrorBoundingPairs.stan
+  #include infiniteBatches.stan
 }
 
 data {
   real<lower=0> p;
   real<lower=0> Epsilon;
-  real TrueValue;
-  int<lower=0>maxIter;
+  real logL;
+  int<lower=0> maxIter;
+  int<lower=0> batchSize;
+  int<lower=0> n0;
 }
 
 transformed data {
@@ -24,9 +22,7 @@ transformed data {
 }
 
 generated quantities {
-  array[2] real estimatedSumToThreshold = infiniteSumToThreshold(params, Epsilon, maxIter, 0);
-  real differenceSumToThreshold;
-  real truth_1 = TrueValue;
-
-  differenceSumToThreshold = difference_check(TrueValue, estimatedSumToThreshold[1]);
+  array[2] real estimatedSumToThreshold = infiniteSumToThreshold(params, Epsilon, maxIter, n0);
+  array[2] real estimatedErrorBoundingPairs = infiniteErrorBoundingPairs(params, Epsilon, maxIter, logL, n0);
+  array[2] real estimatedBatches = infiniteBatches(params, batchSize, Epsilon, maxIter, n0);
 }
