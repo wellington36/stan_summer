@@ -20,7 +20,7 @@ my_dilog <- function(z) {
   return(-out)
 }
 
-# system("rm stan/comparison_methods")
+system("rm stan/comparison_methods")
 model <- cmdstan_model("stan/comparison_methods.stan",
                        include_paths = "stan")
 
@@ -43,6 +43,7 @@ cdata <- list(p = a1, Epsilon = Eps, maxIter = M,
 comparison <- stanfit(
   model$sample(
     data = cdata,
+    chains = 1,
     iter_warmup = 1,
     iter_sampling = 1,
     fixed_param = TRUE
@@ -51,8 +52,8 @@ comparison <- stanfit(
 
 ( ext <- rstan::extract(comparison) )
 
+Rmpfr::mpfr(ext$estimatedSumToThreshold[1], 1000)
 Rmpfr::mpfr(cdata$TrueValue, 1000)
 Rmpfr::mpfr(ext$truth_1, 1000)
-Rmpfr::mpfr(ext$truth_2, 1000)
 Rmpfr::mpfr(ext$difference, 1000)
-Rmpfr::mpfr(ext$difference2, 1000)
+
