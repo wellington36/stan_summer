@@ -6,6 +6,7 @@ functions{
   #include infiniteSumToThreshold.stan
   #include infiniteErrorBoundingPairs.stan
   #include infiniteBatches.stan
+  #include SumToCap.stan
 }
 
 data {
@@ -25,4 +26,5 @@ generated quantities {
   array[2] real estimatedSumToThreshold = infiniteSumToThreshold(params, Epsilon, maxIter, n0);
   array[2] real estimatedErrorBoundingPairs = infiniteErrorBoundingPairs(params, Epsilon, maxIter, logL, n0);
   array[2] real estimatedBatches = infiniteBatches(params, batchSize, Epsilon, maxIter, n0);
+  array[2] real estimatedBigSum = SumToCap(params, maxIter, 0);
 }

@@ -43,10 +43,10 @@ cdata <- list(p = a1, Epsilon = Eps, maxIter = M,
 comparison <- stanfit(
   model$sample(
     data = cdata,
-    chains = 1,
-    iter_warmup = 1,
+    fixed_param = TRUE,
     iter_sampling = 1,
-    fixed_param = TRUE
+    adapt_engaged = FALSE,
+    chains = 1
   )
 )
 
@@ -55,6 +55,9 @@ comparison <- stanfit(
 naive.1 <- ext$estimatedSumToThreshold
 adaptive.1 <- ext$estimatedErrorBoundingPairs
 batches.1 <- ext$estimatedBatches
+
+lapply(ext[grep("estimated", names(ext))],
+       function(x) Rmpfr::mpfr(x, 1000))
 
 ####################
 a2 <- 1.1
@@ -72,10 +75,10 @@ cdata <- list(p = a2, Epsilon = Eps, maxIter = M,
 comparison <- stanfit(
   model$sample(
     data = cdata,
-    chains = 1,
-    iter_warmup = 1,
+    fixed_param = TRUE,
     iter_sampling = 1,
-    fixed_param = TRUE
+    adapt_engaged = FALSE,
+    chains = 1
   )
 )
 
@@ -93,10 +96,10 @@ cdata <- list(p = a2, Epsilon = Eps, maxIter = M,
 comparison <- stanfit(
   model$sample(
     data = cdata,
-    chains = 1,
-    iter_warmup = 1,
+    fixed_param = TRUE,
     iter_sampling = 1,
-    fixed_param = TRUE
+    adapt_engaged = FALSE,
+    chains = 1
   )
 )
 
@@ -199,5 +202,8 @@ Eps * exp(-log(a2)-log1p(-L2))  ## This should be theoretical upper bound on the
 robust_difference(x = TV.2, y = TTV.2)
 
 subset(rbind(out1, out2), true_method == "Huge")
-B1
-B2
+
+##################
+
+lapply(ext[grep("estimated", names(ext))],
+       function(x) Rmpfr::mpfr(x, 1000))
