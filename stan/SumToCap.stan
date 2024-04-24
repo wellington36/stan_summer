@@ -7,5 +7,5 @@ array[] real SumToCap(array[] real p, int nmax, int n0) {
   for (i in 1:n){
     storeVal[i] = logFunction(n0 + i - 1, p);
   }
-  return {log_sum_exp(sort_asc(storeVal[:n])), 1. * n};
+  return {log_sum_exp(storeVal[:n]), 1. * n};
 }

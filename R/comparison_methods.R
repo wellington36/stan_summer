@@ -21,13 +21,13 @@ my_dilog <- function(z) {
 }
 
 
-system("rm stan/comparison_methods")
+#system("rm stan/comparison_methods")
 model <- cmdstan_model("stan/comparison_methods.stan",
                        include_paths = "stan")
 ####################
 
 Eps <- .Machine$double.eps
-M <- 5E5
+M <- 1E6
 a1 <- 2
 L1 <- 1/a1
 B1 <- 1/(a1-1)
@@ -37,13 +37,19 @@ lps.1 <- sapply(0:(1E6),
 TV.1 <- matrixStats::logSumExp(sort(lps.1))
 TTV.1 <- log(1/12 * (pi^2 - 6*log(2)^2))
 
-cdata <- list(p = a1, Epsilon = Eps, maxIter = M,
-              logL = -log(a1), n0 = 0, batchSize = 2)
+cdata <- list(
+  p = a1,
+  Epsilon = Eps,
+  maxIter = M,
+  logL = -log(a1),
+  n0 = 0,
+  batchSize = 2)
 
 comparison <- stanfit(
   model$sample(
     data = cdata,
     fixed_param = TRUE,
+    sig_figs = 18,
     iter_sampling = 1,
     adapt_engaged = FALSE,
     chains = 1
@@ -57,7 +63,7 @@ adaptive.1 <- ext$estimatedErrorBoundingPairs
 batches.1 <- ext$estimatedBatches
 
 lapply(ext[grep("estimated", names(ext))],
-       function(x) Rmpfr::mpfr(x, 1000))
+       function(x) Rmpfr::mpfr(TTV.1 - x[1], 1000))
 
 ####################
 a2 <- 1.1
@@ -69,13 +75,19 @@ lps.2 <- sapply(0:(1E6),
 TV.2 <- matrixStats::logSumExp(sort(lps.2))
 TTV.2 <- log(my_dilog(1/a2))
 
-cdata <- list(p = a2, Epsilon = Eps, maxIter = M,
-              logL = -log(a2), n0 = 0, batchSize = round(B2/2))
+cdata <- list(
+  p = a2,
+  Epsilon = Eps,
+  maxIter = M,
+  logL = -log(a2),
+  n0 = 0,
+  batchSize = round(B2/2))
 
 comparison <- stanfit(
   model$sample(
     data = cdata,
     fixed_param = TRUE,
+    sig_figs = 18,
     iter_sampling = 1,
     adapt_engaged = FALSE,
     chains = 1
@@ -90,13 +102,19 @@ batches.2 <- ext$estimatedBatches
 
 ################
 
-cdata <- list(p = a2, Epsilon = Eps, maxIter = M,
-              logL = -log(a2), n0 = 0, batchSize = B2)
+cdata <- list(
+  p = a2,
+  Epsilon = Eps,
+  maxIter = M,
+  logL = -log(a2),
+  n0 = 0,
+  batchSize = B2)
 
 comparison <- stanfit(
   model$sample(
     data = cdata,
     fixed_param = TRUE,
+    sig_figs = 18,
     iter_sampling = 1,
     adapt_engaged = FALSE,
     chains = 1
@@ -194,7 +212,7 @@ out2 <- rbind(out2a, out2b)
 
 ##################
 
-out1 
+out1
 robust_difference(x = TV.1, y = TTV.1)
 
 out2
@@ -202,8 +220,10 @@ Eps * exp(-log(a2)-log1p(-L2))  ## This should be theoretical upper bound on the
 robust_difference(x = TV.2, y = TTV.2)
 
 subset(rbind(out1, out2), true_method == "Huge")
+B1
+B2
 
 ##################
 
-lapply(ext[grep("estimated", names(ext))],
-       function(x) Rmpfr::mpfr(x, 1000))
+#lapply(ext[grep("estimated", names(ext))],
+#       function(x) Rmpfr::mpfr(x, 1000))
